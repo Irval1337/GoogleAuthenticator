@@ -5,12 +5,12 @@ function checkData($log, $pass){
 }
 
 if (isset($_GET['login']) && isset($_GET['password']) && isset($_GET['secretKey']) && isset($_GET['username']) && isset($_GET['site'])) {
-    $db = mysqli_connect("localhost", "irval_ftl", "0WH4R6", "irval_ftl");
+    $db = mysqli_connect("localhost", "login", "password", "database");
     $log = $_GET['login'];
     $pass = $_GET['password'];
-    $data = mysqli_query($db, "SELECT * FROM `FTL` WHERE `Username` = '{$log}' AND `Password` = '{$pass}'");
+    $data = mysqli_query($db, "SELECT * FROM `DB` WHERE `Username` = '{$log}' AND `Password` = '{$pass}'");
     if (filter_var($log, FILTER_VALIDATE_EMAIL) !== false && $data->num_rows <= 0)
-        $data = mysqli_query($db, "SELECT * FROM `FTL` WHERE `Email` = '{$log}' AND `Password` = '{$pass}'");
+        $data = mysqli_query($db, "SELECT * FROM `DB` WHERE `Email` = '{$log}' AND `Password` = '{$pass}'");
     if ($data->num_rows > 0 && checkData($log, $pass)) {
         $row = mysqli_fetch_array($data);
         $adding = "null";
@@ -33,7 +33,7 @@ if (isset($_GET['login']) && isset($_GET['password']) && isset($_GET['secretKey'
             array_push($tmp, $app);
             $adding = json_encode($tmp);
         }
-        echo mysqli_query($db, "UPDATE `FTL` SET `SecretKeys` = '{$adding}' WHERE `Username` = '{$log}' OR `Email` = '{$log}'") ? "OK" : "ERROR";
+        echo mysqli_query($db, "UPDATE `DB` SET `SecretKeys` = '{$adding}' WHERE `Username` = '{$log}' OR `Email` = '{$log}'") ? "OK" : "ERROR";
     } else
         echo 'INCORRECT';
     mysqli_close($db);

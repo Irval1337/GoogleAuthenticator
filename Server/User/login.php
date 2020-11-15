@@ -5,12 +5,12 @@ function checkData($log, $pass) {
 }
 
 if (isset($_GET['login']) && isset($_GET['password'])) {
-    $db = mysqli_connect("localhost", "irval_ftl", "0WH4R6", "irval_ftl");
+    $db = mysqli_connect("localhost", "login", "password", "database");
     $log = $_GET['login'];
     $pass = $_GET['password'];
-    $data = mysqli_query($db, "SELECT * FROM `FTL` WHERE `Username` = '{$log}' AND `Password` = '{$pass}'");
+    $data = mysqli_query($db, "SELECT * FROM `DB` WHERE `Username` = '{$log}' AND `Password` = '{$pass}'");
     if (filter_var($log, FILTER_VALIDATE_EMAIL) !== false && $data->num_rows <= 0)
-        $data = mysqli_query($db, "SELECT * FROM `FTL` WHERE `Email` = '{$log}' AND `Password` = '{$pass}'");
+        $data = mysqli_query($db, "SELECT * FROM `DB` WHERE `Email` = '{$log}' AND `Password` = '{$pass}'");
     if ($data->num_rows > 0 && checkData($log, $pass)) {
         $row = mysqli_fetch_array($data);
         $user = new User();
