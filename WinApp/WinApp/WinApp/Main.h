@@ -561,7 +561,7 @@ namespace WinApp {
 			this->tabPage2->Location = System::Drawing::Point(4, 4);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage2->Size = System::Drawing::Size(327, 355);
+			this->tabPage2->Size = System::Drawing::Size(327, 392);
 			this->tabPage2->TabIndex = 1;
 			this->tabPage2->Text = L"Registration";
 			// 
@@ -718,7 +718,7 @@ namespace WinApp {
 			this->tabPage3->Controls->Add(this->label10);
 			this->tabPage3->Location = System::Drawing::Point(4, 4);
 			this->tabPage3->Name = L"tabPage3";
-			this->tabPage3->Size = System::Drawing::Size(327, 355);
+			this->tabPage3->Size = System::Drawing::Size(327, 392);
 			this->tabPage3->TabIndex = 2;
 			this->tabPage3->Text = L"Password recovery";
 			// 
@@ -973,7 +973,7 @@ namespace WinApp {
 			this->appinfo->Size = System::Drawing::Size(293, 34);
 			this->appinfo->TabIndex = 0;
 			this->appinfo->TabStop = false;
-			this->appinfo->Text = L"Информация о приложении";
+			this->appinfo->Text = L"Лицензионное соглашение";
 			this->appinfo->UseVisualStyleBackColor = false;
 			this->appinfo->Click += gcnew System::EventHandler(this, &Main::appinfo_Click);
 			// 
@@ -987,7 +987,7 @@ namespace WinApp {
 			this->tabPage5->Controls->Add(this->elementpanel);
 			this->tabPage5->Location = System::Drawing::Point(4, 4);
 			this->tabPage5->Name = L"tabPage5";
-			this->tabPage5->Size = System::Drawing::Size(327, 355);
+			this->tabPage5->Size = System::Drawing::Size(327, 392);
 			this->tabPage5->TabIndex = 4;
 			this->tabPage5->Text = L"Main";
 			// 
@@ -1356,7 +1356,7 @@ namespace WinApp {
 			this->elementpanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->elementpanel->Location = System::Drawing::Point(0, 0);
 			this->elementpanel->Name = L"elementpanel";
-			this->elementpanel->Size = System::Drawing::Size(327, 355);
+			this->elementpanel->Size = System::Drawing::Size(327, 392);
 			this->elementpanel->TabIndex = 1;
 			// 
 			// tabPage6
@@ -1372,7 +1372,7 @@ namespace WinApp {
 			this->tabPage6->Location = System::Drawing::Point(4, 4);
 			this->tabPage6->Name = L"tabPage6";
 			this->tabPage6->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage6->Size = System::Drawing::Size(327, 355);
+			this->tabPage6->Size = System::Drawing::Size(327, 392);
 			this->tabPage6->TabIndex = 5;
 			this->tabPage6->Text = L"Add email";
 			// 
@@ -1458,7 +1458,7 @@ namespace WinApp {
 			this->tabPage7->Location = System::Drawing::Point(4, 4);
 			this->tabPage7->Name = L"tabPage7";
 			this->tabPage7->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage7->Size = System::Drawing::Size(327, 355);
+			this->tabPage7->Size = System::Drawing::Size(327, 392);
 			this->tabPage7->TabIndex = 6;
 			this->tabPage7->Text = L"Services";
 			// 
@@ -1489,7 +1489,7 @@ namespace WinApp {
 			this->tabPage8->Location = System::Drawing::Point(4, 4);
 			this->tabPage8->Name = L"tabPage8";
 			this->tabPage8->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage8->Size = System::Drawing::Size(327, 355);
+			this->tabPage8->Size = System::Drawing::Size(327, 392);
 			this->tabPage8->TabIndex = 7;
 			this->tabPage8->Text = L"Import";
 			// 
@@ -2276,7 +2276,7 @@ namespace WinApp {
 		SetSystemTime(&systemTime);
 	}
 	private: System::Void appinfo_Click(System::Object^ sender, System::EventArgs^ e) {
-		Process::Start("https://github.com/Irval1337/GoogleAuthenticator/blob/main/INFO.md");
+		Process::Start("https://github.com/Irval1337/GoogleAuthenticator/blob/main/LICENSE");
 	}
 	private: System::Void services_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (!String::IsNullOrEmpty(user->Id))
