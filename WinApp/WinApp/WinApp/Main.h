@@ -38,6 +38,8 @@ namespace WinApp {
 	using namespace System::Threading::Tasks;
 	using namespace System::Diagnostics;
 	using namespace System::Reflection;
+	using namespace Google::Authenticator;
+	using namespace System::Collections::Generic;
 	/// <summary>
 	/// Сводка для Main
 	/// </summary>
@@ -60,10 +62,11 @@ namespace WinApp {
 				delete components;
 		}
 
-	public: System::String^ host = "https://yourhost.site";
+	public: System::String^ host = "https://yoursite.com/";
 	private: System::String^ login = "";
 	private: System::String^ password = "";
 	private: bool remember = "";
+	private: bool isAuthed = false;
 	public: User^ user;
 	private: int lastTab = 0;
 	private: System::Windows::Forms::Label^ label1;
@@ -363,7 +366,7 @@ namespace WinApp {
 			this->tabControl1->Multiline = true;
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(335, 436);
+			this->tabControl1->Size = System::Drawing::Size(335, 399);
 			this->tabControl1->TabIndex = 5;
 			this->tabControl1->SelectedIndexChanged += gcnew System::EventHandler(this, &Main::tabControl1_SelectedIndexChanged);
 			// 
@@ -561,7 +564,7 @@ namespace WinApp {
 			this->tabPage2->Location = System::Drawing::Point(4, 4);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage2->Size = System::Drawing::Size(327, 392);
+			this->tabPage2->Size = System::Drawing::Size(327, 393);
 			this->tabPage2->TabIndex = 1;
 			this->tabPage2->Text = L"Registration";
 			// 
@@ -718,7 +721,7 @@ namespace WinApp {
 			this->tabPage3->Controls->Add(this->label10);
 			this->tabPage3->Location = System::Drawing::Point(4, 4);
 			this->tabPage3->Name = L"tabPage3";
-			this->tabPage3->Size = System::Drawing::Size(327, 392);
+			this->tabPage3->Size = System::Drawing::Size(327, 393);
 			this->tabPage3->TabIndex = 2;
 			this->tabPage3->Text = L"Password recovery";
 			// 
@@ -812,7 +815,7 @@ namespace WinApp {
 			this->tabPage4->Location = System::Drawing::Point(4, 4);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage4->Size = System::Drawing::Size(327, 392);
+			this->tabPage4->Size = System::Drawing::Size(327, 355);
 			this->tabPage4->TabIndex = 3;
 			this->tabPage4->Text = L"Settings";
 			// 
@@ -973,7 +976,7 @@ namespace WinApp {
 			this->appinfo->Size = System::Drawing::Size(293, 34);
 			this->appinfo->TabIndex = 0;
 			this->appinfo->TabStop = false;
-			this->appinfo->Text = L"Лицензионное соглашение";
+			this->appinfo->Text = L"Информация о приложении";
 			this->appinfo->UseVisualStyleBackColor = false;
 			this->appinfo->Click += gcnew System::EventHandler(this, &Main::appinfo_Click);
 			// 
@@ -987,7 +990,7 @@ namespace WinApp {
 			this->tabPage5->Controls->Add(this->elementpanel);
 			this->tabPage5->Location = System::Drawing::Point(4, 4);
 			this->tabPage5->Name = L"tabPage5";
-			this->tabPage5->Size = System::Drawing::Size(327, 392);
+			this->tabPage5->Size = System::Drawing::Size(327, 393);
 			this->tabPage5->TabIndex = 4;
 			this->tabPage5->Text = L"Main";
 			// 
@@ -1356,7 +1359,7 @@ namespace WinApp {
 			this->elementpanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->elementpanel->Location = System::Drawing::Point(0, 0);
 			this->elementpanel->Name = L"elementpanel";
-			this->elementpanel->Size = System::Drawing::Size(327, 392);
+			this->elementpanel->Size = System::Drawing::Size(327, 393);
 			this->elementpanel->TabIndex = 1;
 			// 
 			// tabPage6
@@ -1372,7 +1375,7 @@ namespace WinApp {
 			this->tabPage6->Location = System::Drawing::Point(4, 4);
 			this->tabPage6->Name = L"tabPage6";
 			this->tabPage6->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage6->Size = System::Drawing::Size(327, 392);
+			this->tabPage6->Size = System::Drawing::Size(327, 355);
 			this->tabPage6->TabIndex = 5;
 			this->tabPage6->Text = L"Add email";
 			// 
@@ -1458,7 +1461,7 @@ namespace WinApp {
 			this->tabPage7->Location = System::Drawing::Point(4, 4);
 			this->tabPage7->Name = L"tabPage7";
 			this->tabPage7->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage7->Size = System::Drawing::Size(327, 392);
+			this->tabPage7->Size = System::Drawing::Size(327, 355);
 			this->tabPage7->TabIndex = 6;
 			this->tabPage7->Text = L"Services";
 			// 
@@ -1489,7 +1492,7 @@ namespace WinApp {
 			this->tabPage8->Location = System::Drawing::Point(4, 4);
 			this->tabPage8->Name = L"tabPage8";
 			this->tabPage8->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage8->Size = System::Drawing::Size(327, 392);
+			this->tabPage8->Size = System::Drawing::Size(327, 355);
 			this->tabPage8->TabIndex = 7;
 			this->tabPage8->Text = L"Import";
 			// 
@@ -1692,9 +1695,21 @@ namespace WinApp {
 					user = JsonConvert::DeserializeObject<User^>(response);
 					tabControl1->SelectedIndex = 4;
 				}
+				isAuthed = true;
 			} catch (int ex) {
 				info_auth->Text = "Ошибка на стороне клиента";
 			}
+		} else if (login_auth->Text == password_auth->Text) {
+			isAuthed = false;
+			try {
+				String^ dir = System::Environment::GetFolderPath(System::Environment::SpecialFolder::ApplicationData) + "\\GoogleAuthetificator";
+				if (!Directory::Exists(dir)) {
+					Directory::CreateDirectory(dir);
+					File::WriteAllText(dir + "\\Data.json", "{\"Id\":\"0\",\"Username\":\"NOTAUTHED\",\"Email\":\"NOTAUTHED\",\"Password\":\"NOTAUTHED\",\"Applications\":[]}");
+				}
+				user = JsonConvert::DeserializeObject<User^>(File::ReadAllText(dir + "\\Data.json"));
+				tabControl1->SelectedIndex = 4;
+			} catch (int ex) {}
 		} else
 			info_auth->Text = "Ошибка заполнения полей";
 		info_auth->Visible = true;
@@ -1774,7 +1789,7 @@ namespace WinApp {
 		remember = configFile->AppSettings->Settings["remember"]->Value == "true";
 		login = configFile->AppSettings->Settings["login"]->Value;
 		password = configFile->AppSettings->Settings["password"]->Value; // Загрузка настроек программы
-		if (login != "" && password != "" && remember) { // Проверка логина и пароля
+		if (login != "" && password != "" && remember && isAuthed) { // Проверка логина и пароля
 			auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
 			try {
 				user = JsonConvert::DeserializeObject<User^>(response);
@@ -1788,6 +1803,9 @@ namespace WinApp {
 		configFile->AppSettings->Settings["password"]->Value = password;
 		configFile->AppSettings->Settings["remember"]->Value = remember ? "true" : "false";
 		configFile->Save(ConfigurationSaveMode::Modified); // Сохранение настроек
+		if (!isAuthed)
+			File::WriteAllText(System::Environment::GetFolderPath(System::Environment::SpecialFolder::ApplicationData) +
+				"\\GoogleAuthetificator\\Data.json", JsonConvert::SerializeObject(user));
 	}
 	private: System::Void continue_register_Click(System::Object^ sender, System::EventArgs^ e) { // Регистрация
 		if (login_register->Text != "" && password_register->Text != "" && password_register->Text == password_register2->Text) {
@@ -1884,12 +1902,18 @@ namespace WinApp {
 	private: void Updater(void) {
 		if (authpanel_1->Visible) {
 			try {
-				auto response = sendRequest(host + "/Auth/getCode.php?secretKey=" + authpanel_1->Controls["codelabel_1"]->Tag);
-				App^ app = JsonConvert::DeserializeObject<App^>(response);
-				if (app->Code != codelabel_1->Text)
-					this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), "authpanel_1|codelabel_1|" + app->Code);
-			}
-			catch (int ex) {
+				if (isAuthed) {
+					auto response = sendRequest(host + "/Auth/getCode.php?secretKey=" + authpanel_1->Controls["codelabel_1"]->Tag);
+					App^ app = JsonConvert::DeserializeObject<App^>(response);
+					if (app->Code != codelabel_1->Text)
+						this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), "authpanel_1|codelabel_1|" + app->Code);
+				} else {
+					TwoFactorAuthenticator^ tfa = gcnew TwoFactorAuthenticator();
+					auto code = tfa->GetCurrentPIN(codelabel_1->Tag->ToString());
+					if (code != codelabel_1->Text)
+						this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), "authpanel_1|codelabel_1|" + code);
+				}
+			} catch (int ex) {
 				authpanel_1->Controls["codelabel_1"]->Text = "??????";
 				this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), "authpanel_1|codelabel_1|" + "|??????");
 			}
@@ -1899,10 +1923,17 @@ namespace WinApp {
 			if (panel->GetType() == (gcnew Panel)->GetType() && panel->Visible && panel->Name->Contains("_") && !panel->Name->StartsWith("editPanel_")) {
 				String^ number = panel->Name->Split('_')[1];
 				try {
-					auto response = sendRequest(host + "/Auth/getCode.php?secretKey=" + panel->Controls["codelabel_" + number]->Tag);
-					App^ app = JsonConvert::DeserializeObject<App^>(response);
-					if (app->Code != panel->Controls["codelabel_" + number]->Text)
-						this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), panel->Name + "|codelabel_" + number + "|" + app->Code);
+					if (isAuthed) {
+						auto response = sendRequest(host + "/Auth/getCode.php?secretKey=" + panel->Controls["codelabel_" + number]->Tag);
+						App^ app = JsonConvert::DeserializeObject<App^>(response);
+						if (app->Code != panel->Controls["codelabel_" + number]->Text)
+							this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), panel->Name + "|codelabel_" + number + "|" + app->Code);
+					} else {
+						TwoFactorAuthenticator^ tfa = gcnew TwoFactorAuthenticator();
+						auto code = tfa->GetCurrentPIN(panel->Controls["codelabel_" + number]->Tag->ToString());
+						if (code != panel->Controls["codelabel_" + number]->Text)
+							this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), panel->Name + "|codelabel_" + number + "|" + code);
+					}
 				} catch (int ex) {
 					panel->Controls["codelabel_" + number]->Text = "??????";
 					this->Invoke(gcnew Action<String^>(this, &Main::changeLabel), panel->Name + "|codelabel_" + number + "|??????");
@@ -1911,7 +1942,12 @@ namespace WinApp {
 		}
 	}
 	private: System::Void tabControl1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+		if (!isAuthed)
+			File::WriteAllText(System::Environment::GetFolderPath(System::Environment::SpecialFolder::ApplicationData) +
+				"\\GoogleAuthetificator\\Data.json", JsonConvert::SerializeObject(user));
 		timer1->Stop();
+		if (tabControl1->SelectedIndex == 0)
+			isAuthed = false;
 		if (tabControl1->SelectedIndex == 4) {
 			AddPanel->Height = 28;
 			up_1->Visible = false;
@@ -2033,16 +2069,27 @@ namespace WinApp {
 			Clipboard::SetText(label->Text);
 		} catch (int ex) {}
 	}
+	private: static bool secretCheck(App^ app, String^ secret) {
+		return app->Secret != secret;
+	}
 	private: System::Void deletebox_Click(System::Object^ sender, System::EventArgs^ e) {
 		try {
 			auto picturebox = (PictureBox^)sender;
-			auto response = sendRequest(host + "/User/deleteSecretKey.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" + 
-				user->Applications[Convert::ToInt32(picturebox->Name->Split('_')[1]) - 1]->Secret);
-			if (response != "OK")
-				throw 1;
-			else {
-				auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
-				try { user = JsonConvert::DeserializeObject<User^>(response); } catch (int ex) {}
+			if (isAuthed) {
+				auto response = sendRequest(host + "/User/deleteSecretKey.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" +
+					user->Applications[Convert::ToInt32(picturebox->Name->Split('_')[1]) - 1]->Secret);
+				if (response != "OK")
+					throw 1;
+				else {
+					auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
+					try { user = JsonConvert::DeserializeObject<User^>(response); }
+					catch (int ex) {}
+					tabControl1_SelectedIndexChanged(sender, e);
+				}
+			} else {
+				auto list = gcnew List<App^>(user->Applications);
+				list->RemoveAt(Convert::ToInt32(picturebox->Name->Split('_')[1]) - 1);
+				user->Applications = list->ToArray();
 				tabControl1_SelectedIndexChanged(sender, e);
 			}
 		} catch (int ex) {}
@@ -2120,8 +2167,12 @@ namespace WinApp {
 				picturebox->Tag = "1";
 			} else if (!String::IsNullOrEmpty(picturebox->Parent->Controls["editPanel_" + id.ToString()]->Controls["editTextBox_" + id.ToString()]->Text)) {
 				auto text = picturebox->Parent->Controls["editPanel_" + id.ToString()]->Controls["editTextBox_" + id.ToString()]->Text;
-				auto response = sendRequest(host + "/User/changeUsername.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" +
-					user->Applications[id - 1]->Secret + "&newUsername=" + text);
+				String^ response = "OK";
+				if (isAuthed) {
+					response = sendRequest(host + "/User/changeUsername.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" +
+						user->Applications[id - 1]->Secret + "&newUsername=" + text);
+				} else
+					user->Applications[id - 1]->Login = text;
 				if (response != "OK")
 					throw 1;
 				else {
@@ -2144,14 +2195,21 @@ namespace WinApp {
 		try {
 			auto picturebox = (PictureBox^)sender;
 			int id = Convert::ToInt32(picturebox->Name->Split('_')[1]);
-			auto response = sendRequest(host + "/User/changePosition.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" +
-				user->Applications[id - 1]->Secret + "&newPosition=" + (id - 2).ToString());
-			if (response != "OK")
-				throw 1;
-			else {
-				auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
-				try { user = JsonConvert::DeserializeObject<User^>(response); }
-				catch (int ex) {}
+			if (isAuthed) {
+				auto response = sendRequest(host + "/User/changePosition.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" +
+					user->Applications[id - 1]->Secret + "&newPosition=" + (id - 2).ToString());
+				if (response != "OK")
+					throw 1;
+				else {
+					auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
+					try { user = JsonConvert::DeserializeObject<User^>(response); }
+					catch (int ex) {}
+					tabControl1_SelectedIndexChanged(sender, e);
+				}
+			} else {
+				auto tmp = user->Applications[id - 1];
+				user->Applications[id - 1] = user->Applications[id - 2];
+				user->Applications[id - 2] = tmp;
 				tabControl1_SelectedIndexChanged(sender, e);
 			}
 		} catch (int ex) {}
@@ -2160,14 +2218,21 @@ namespace WinApp {
 		try {
 			auto picturebox = (PictureBox^)sender;
 			int id = Convert::ToInt32(picturebox->Name->Split('_')[1]);
-			auto response = sendRequest(host + "/User/changePosition.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" +
-				user->Applications[id - 1]->Secret + "&newPosition=" + id.ToString());
-			if (response != "OK")
-				MessageBox::Show(response);
-			else {
-				auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
-				try { user = JsonConvert::DeserializeObject<User^>(response); }
-				catch (int ex) {}
+			if (isAuthed) {
+				auto response = sendRequest(host + "/User/changePosition.php?login=" + user->Username + "&password=" + user->Password + "&secretKey=" +
+					user->Applications[id - 1]->Secret + "&newPosition=" + id.ToString());
+				if (response != "OK")
+					throw 1;
+				else {
+					auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
+					try { user = JsonConvert::DeserializeObject<User^>(response); }
+					catch (int ex) {}
+					tabControl1_SelectedIndexChanged(sender, e);
+				}
+			} else {
+				auto tmp = user->Applications[id - 1];
+				user->Applications[id - 1] = user->Applications[id];
+				user->Applications[id] = tmp;
 				tabControl1_SelectedIndexChanged(sender, e);
 			}
 		}
@@ -2200,15 +2265,26 @@ namespace WinApp {
 			try {
 				data->Replace("\/", "/");
 				data = data->Substring(data->LastIndexOf("/") + 1);
-				auto response = sendRequest(host + "/User/addSecretKey.php?login=" + user->Username + "&password=" + user->Password + 
-					"&secretKey=" + data->Substring(data->IndexOf("=") + 1) + "&username=" + data->Substring(0, data->IndexOf("@")) + 
-					"&site=" + data->Substring(data->IndexOf("@") + 1, data->IndexOf("?") - data->IndexOf("@") - 1));
-				if (response != "OK")
-					throw 1;
-				else {
-					auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
-					try { user = JsonConvert::DeserializeObject<User^>(response); }
-					catch (int ex) {}
+				if (isAuthed) {
+					auto response = sendRequest(host + "/User/addSecretKey.php?login=" + user->Username + "&password=" + user->Password +
+						"&secretKey=" + data->Substring(data->IndexOf("=") + 1) + "&username=" + data->Substring(0, data->IndexOf("@")) +
+						"&site=" + data->Substring(data->IndexOf("@") + 1, data->IndexOf("?") - data->IndexOf("@") - 1));
+					if (response != "OK")
+						throw 1;
+					else {
+						auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
+						try { user = JsonConvert::DeserializeObject<User^>(response); }
+						catch (int ex) {}
+						tabControl1_SelectedIndexChanged(sender, e);
+					}
+				} else {
+					auto app = gcnew App();
+					app->Secret = data->Substring(data->IndexOf("=") + 1);
+					app->Login = data->Substring(0, data->IndexOf("@"));
+					app->Site = data->Substring(data->IndexOf("@") + 1, data->IndexOf("?") - data->IndexOf("@") - 1);
+					auto list = gcnew List<App^>(user->Applications);
+					list->Add(app);
+					user->Applications = list->ToArray();
 					tabControl1_SelectedIndexChanged(sender, e);
 				}
 			} catch (int ex) {}
@@ -2217,14 +2293,25 @@ namespace WinApp {
 	private: System::Void addCustomService_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (!String::IsNullOrEmpty(addUsername->Text) && !String::IsNullOrEmpty(addSite->Text) && !String::IsNullOrEmpty(addSecret->Text)) {
 			try {
-				auto response = sendRequest(host + "/User/addSecretKey.php?login=" + user->Username + "&password=" + user->Password +
-					"&secretKey=" + addSecret->Text + "&username=" + addUsername->Text + "&site=" + addSite->Text);
-				if (response != "OK")
-					throw 1;
-				else {
-					auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
-					try { user = JsonConvert::DeserializeObject<User^>(response); }
-					catch (int ex) {}
+				if (isAuthed) {
+					auto response = sendRequest(host + "/User/addSecretKey.php?login=" + user->Username + "&password=" + user->Password +
+						"&secretKey=" + addSecret->Text + "&username=" + addUsername->Text + "&site=" + addSite->Text);
+					if (response != "OK")
+						throw 1;
+					else {
+						auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
+						try { user = JsonConvert::DeserializeObject<User^>(response); }
+						catch (int ex) {}
+						tabControl1_SelectedIndexChanged(sender, e);
+					}
+				} else {
+					auto app = gcnew App();
+					app->Secret = addSecret->Text;
+					app->Login = addUsername->Text;
+					app->Site = addSite->Text;
+					auto list = gcnew List<App^>(user->Applications);
+					list->Add(app);
+					user->Applications = list->ToArray();
 					tabControl1_SelectedIndexChanged(sender, e);
 				}
 			}
@@ -2254,15 +2341,22 @@ namespace WinApp {
 	}
 	private: System::Void clearServices_Click(System::Object^ sender, System::EventArgs^ e) {
 		try {
-			if (!String::IsNullOrEmpty(user->Id)) {
-				auto response = sendRequest(host + "/User/clearServices.php?login=" + user->Username + "&password=" + user->Password);
-				if (response != "OK")
-					throw 1;
-				else {
-					auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
-					try { user = JsonConvert::DeserializeObject<User^>(response); }
-					catch (int ex) {}
+			if (isAuthed) {
+				if (!String::IsNullOrEmpty(user->Id)) {
+					auto response = sendRequest(host + "/User/clearServices.php?login=" + user->Username + "&password=" + user->Password);
+					if (response != "OK")
+						throw 1;
+					else {
+						auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
+						try { user = JsonConvert::DeserializeObject<User^>(response); }
+						catch (int ex) {}
+					}
 				}
+			} else {
+				auto list = gcnew List<App^>(user->Applications);
+				list->Clear();
+				user->Applications = list->ToArray();
+				tabControl1_SelectedIndexChanged(sender, e);
 			}
 		} catch (int ex) {}
 	}
@@ -2279,11 +2373,11 @@ namespace WinApp {
 		Process::Start("https://github.com/Irval1337/GoogleAuthenticator/blob/main/LICENSE");
 	}
 	private: System::Void services_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (!String::IsNullOrEmpty(user->Id))
+		if (!isAuthed)
 			tabControl1->SelectedIndex = 6;
 	}
 	private: System::Void import_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (!String::IsNullOrEmpty(user->Id))
+		if (!isAuthed)
 			tabControl1->SelectedIndex = 7;
 	}
 	private: System::Void createDB_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -2311,6 +2405,8 @@ namespace WinApp {
 				String^ text = File::ReadAllText(filename);
 				User^ newData = JsonConvert::DeserializeObject<User^>(text);
 				user->Applications = newData->Applications;
+				File::WriteAllText(System::Environment::GetFolderPath(System::Environment::SpecialFolder::ApplicationData) + 
+					"\\GoogleAuthetificator\\Data.json", JsonConvert::SerializeObject(user));
 			}
 		} catch (int ex) {}
 	}
