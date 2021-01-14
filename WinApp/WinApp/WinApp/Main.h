@@ -48,9 +48,6 @@ namespace WinApp {
 		Main(void) {
 			InitializeComponent();
 			SetStyle(ControlStyles::SupportsTransparentBackColor, true);
-			//
-			//TODO: добавьте код конструктора
-			//
 		}
 
 	protected:
@@ -69,6 +66,7 @@ namespace WinApp {
 	private: bool isAuthed = false;
 	public: User^ user;
 	private: int lastTab = 0;
+
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::PictureBox^ close;
 
@@ -366,7 +364,7 @@ namespace WinApp {
 			this->tabControl1->Multiline = true;
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(335, 399);
+			this->tabControl1->Size = System::Drawing::Size(335, 437);
 			this->tabControl1->TabIndex = 5;
 			this->tabControl1->SelectedIndexChanged += gcnew System::EventHandler(this, &Main::tabControl1_SelectedIndexChanged);
 			// 
@@ -389,7 +387,7 @@ namespace WinApp {
 			this->tabPage1->Location = System::Drawing::Point(4, 4);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage1->Size = System::Drawing::Size(327, 355);
+			this->tabPage1->Size = System::Drawing::Size(327, 393);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L"Login";
 			// 
@@ -815,7 +813,7 @@ namespace WinApp {
 			this->tabPage4->Location = System::Drawing::Point(4, 4);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage4->Size = System::Drawing::Size(327, 355);
+			this->tabPage4->Size = System::Drawing::Size(327, 393);
 			this->tabPage4->TabIndex = 3;
 			this->tabPage4->Text = L"Settings";
 			// 
@@ -1375,7 +1373,7 @@ namespace WinApp {
 			this->tabPage6->Location = System::Drawing::Point(4, 4);
 			this->tabPage6->Name = L"tabPage6";
 			this->tabPage6->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage6->Size = System::Drawing::Size(327, 355);
+			this->tabPage6->Size = System::Drawing::Size(327, 393);
 			this->tabPage6->TabIndex = 5;
 			this->tabPage6->Text = L"Add email";
 			// 
@@ -1461,7 +1459,7 @@ namespace WinApp {
 			this->tabPage7->Location = System::Drawing::Point(4, 4);
 			this->tabPage7->Name = L"tabPage7";
 			this->tabPage7->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage7->Size = System::Drawing::Size(327, 355);
+			this->tabPage7->Size = System::Drawing::Size(327, 393);
 			this->tabPage7->TabIndex = 6;
 			this->tabPage7->Text = L"Services";
 			// 
@@ -1492,7 +1490,7 @@ namespace WinApp {
 			this->tabPage8->Location = System::Drawing::Point(4, 4);
 			this->tabPage8->Name = L"tabPage8";
 			this->tabPage8->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage8->Size = System::Drawing::Size(327, 355);
+			this->tabPage8->Size = System::Drawing::Size(327, 393);
 			this->tabPage8->TabIndex = 7;
 			this->tabPage8->Text = L"Import";
 			// 
@@ -1633,6 +1631,7 @@ namespace WinApp {
 			this->Controls->Add(this->close);
 			this->Controls->Add(this->label1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Main";
 			this->Text = L"Main";
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &Main::Main_FormClosed);
@@ -2103,6 +2102,7 @@ namespace WinApp {
 					editPanel_1->Visible = true;
 					up_1->Visible = true;
 					down_1->Visible = true;
+					down_1->Enabled = id != user->Applications->Length;
 					editTextBox_1->Text = user->Applications[id - 1]->Login;
 				} else {
 					Panel^ panel = gcnew Panel();
@@ -2352,7 +2352,7 @@ namespace WinApp {
 						catch (int ex) {}
 					}
 				}
-			} else {
+			} else if (user != nullptr) {
 				auto list = gcnew List<App^>(user->Applications);
 				list->Clear();
 				user->Applications = list->ToArray();
@@ -2373,7 +2373,7 @@ namespace WinApp {
 		Process::Start("https://github.com/Irval1337/GoogleAuthenticator/blob/main/LICENSE");
 	}
 	private: System::Void services_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (!isAuthed)
+		if (isAuthed)
 			tabControl1->SelectedIndex = 6;
 	}
 	private: System::Void import_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -2382,16 +2382,18 @@ namespace WinApp {
 	}
 	private: System::Void createDB_Click(System::Object^ sender, System::EventArgs^ e) {
 		try {
-			SaveFileDialog^ saveFileDialog1 = gcnew SaveFileDialog();
-			String^ ReadResFilePlace = nullptr;
-			saveFileDialog1->Filter = "JSON Settings (*.json)|*.json|All files (*.*)|*.*";
-			saveFileDialog1->FileName = "GoogleAuth_Backup";
-			saveFileDialog1->DefaultExt = "json";
-			if (saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-				ReadResFilePlace = saveFileDialog1->FileName;
-			StreamWriter^ sw = gcnew StreamWriter(ReadResFilePlace);
-			sw->WriteLine(dataBox->Text);
-			sw->Close();
+			if (user != nullptr) {
+				SaveFileDialog^ saveFileDialog1 = gcnew SaveFileDialog();
+				String^ ReadResFilePlace = nullptr;
+				saveFileDialog1->Filter = "JSON Settings (*.json)|*.json|All files (*.*)|*.*";
+				saveFileDialog1->FileName = "GoogleAuth_Backup";
+				saveFileDialog1->DefaultExt = "json";
+				if (saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+					ReadResFilePlace = saveFileDialog1->FileName;
+				StreamWriter^ sw = gcnew StreamWriter(ReadResFilePlace);
+				sw->WriteLine(dataBox->Text);
+				sw->Close();
+			}
 		} catch (int ex) {}
 	}
 	private: System::Void loadDB_Click(System::Object^ sender, System::EventArgs^ e) {
