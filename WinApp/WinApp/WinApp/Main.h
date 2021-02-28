@@ -364,7 +364,7 @@ namespace WinApp {
 			this->tabControl1->Multiline = true;
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(335, 437);
+			this->tabControl1->Size = System::Drawing::Size(335, 438);
 			this->tabControl1->TabIndex = 5;
 			this->tabControl1->SelectedIndexChanged += gcnew System::EventHandler(this, &Main::tabControl1_SelectedIndexChanged);
 			// 
@@ -387,7 +387,7 @@ namespace WinApp {
 			this->tabPage1->Location = System::Drawing::Point(4, 4);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage1->Size = System::Drawing::Size(327, 393);
+			this->tabPage1->Size = System::Drawing::Size(327, 394);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L"Login";
 			// 
@@ -562,7 +562,7 @@ namespace WinApp {
 			this->tabPage2->Location = System::Drawing::Point(4, 4);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage2->Size = System::Drawing::Size(327, 393);
+			this->tabPage2->Size = System::Drawing::Size(327, 355);
 			this->tabPage2->TabIndex = 1;
 			this->tabPage2->Text = L"Registration";
 			// 
@@ -719,7 +719,7 @@ namespace WinApp {
 			this->tabPage3->Controls->Add(this->label10);
 			this->tabPage3->Location = System::Drawing::Point(4, 4);
 			this->tabPage3->Name = L"tabPage3";
-			this->tabPage3->Size = System::Drawing::Size(327, 393);
+			this->tabPage3->Size = System::Drawing::Size(327, 355);
 			this->tabPage3->TabIndex = 2;
 			this->tabPage3->Text = L"Password recovery";
 			// 
@@ -813,7 +813,7 @@ namespace WinApp {
 			this->tabPage4->Location = System::Drawing::Point(4, 4);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage4->Size = System::Drawing::Size(327, 393);
+			this->tabPage4->Size = System::Drawing::Size(327, 355);
 			this->tabPage4->TabIndex = 3;
 			this->tabPage4->Text = L"Settings";
 			// 
@@ -988,7 +988,7 @@ namespace WinApp {
 			this->tabPage5->Controls->Add(this->elementpanel);
 			this->tabPage5->Location = System::Drawing::Point(4, 4);
 			this->tabPage5->Name = L"tabPage5";
-			this->tabPage5->Size = System::Drawing::Size(327, 393);
+			this->tabPage5->Size = System::Drawing::Size(327, 355);
 			this->tabPage5->TabIndex = 4;
 			this->tabPage5->Text = L"Main";
 			// 
@@ -1357,7 +1357,7 @@ namespace WinApp {
 			this->elementpanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->elementpanel->Location = System::Drawing::Point(0, 0);
 			this->elementpanel->Name = L"elementpanel";
-			this->elementpanel->Size = System::Drawing::Size(327, 393);
+			this->elementpanel->Size = System::Drawing::Size(327, 355);
 			this->elementpanel->TabIndex = 1;
 			// 
 			// tabPage6
@@ -1373,7 +1373,7 @@ namespace WinApp {
 			this->tabPage6->Location = System::Drawing::Point(4, 4);
 			this->tabPage6->Name = L"tabPage6";
 			this->tabPage6->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage6->Size = System::Drawing::Size(327, 393);
+			this->tabPage6->Size = System::Drawing::Size(327, 355);
 			this->tabPage6->TabIndex = 5;
 			this->tabPage6->Text = L"Add email";
 			// 
@@ -1459,7 +1459,7 @@ namespace WinApp {
 			this->tabPage7->Location = System::Drawing::Point(4, 4);
 			this->tabPage7->Name = L"tabPage7";
 			this->tabPage7->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage7->Size = System::Drawing::Size(327, 393);
+			this->tabPage7->Size = System::Drawing::Size(327, 355);
 			this->tabPage7->TabIndex = 6;
 			this->tabPage7->Text = L"Services";
 			// 
@@ -1490,7 +1490,7 @@ namespace WinApp {
 			this->tabPage8->Location = System::Drawing::Point(4, 4);
 			this->tabPage8->Name = L"tabPage8";
 			this->tabPage8->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage8->Size = System::Drawing::Size(327, 393);
+			this->tabPage8->Size = System::Drawing::Size(327, 355);
 			this->tabPage8->TabIndex = 7;
 			this->tabPage8->Text = L"Import";
 			// 
@@ -1707,6 +1707,11 @@ namespace WinApp {
 					File::WriteAllText(dir + "\\Data.json", "{\"Id\":\"0\",\"Username\":\"NOTAUTHED\",\"Email\":\"NOTAUTHED\",\"Password\":\"NOTAUTHED\",\"Applications\":[]}");
 				}
 				user = JsonConvert::DeserializeObject<User^>(File::ReadAllText(dir + "\\Data.json"));
+
+				if (user == nullptr) {
+					File::WriteAllText(dir + "\\Data.json", "{\"Id\":\"0\",\"Username\":\"NOTAUTHED\",\"Email\":\"NOTAUTHED\",\"Password\":\"NOTAUTHED\",\"Applications\":[]}");
+					user = JsonConvert::DeserializeObject<User^>("{\"Id\":\"0\",\"Username\":\"NOTAUTHED\",\"Email\":\"NOTAUTHED\",\"Password\":\"NOTAUTHED\",\"Applications\":[]}");
+				}
 				tabControl1->SelectedIndex = 4;
 			} catch (int ex) {}
 		} else
@@ -1725,10 +1730,16 @@ namespace WinApp {
 		else if (tabControl1->SelectedIndex < 4)
 			tabControl1->SelectedIndex = 0;
 		else if (tabControl1->SelectedIndex == 4) {
+			if (!isAuthed && user != nullptr)
+				File::WriteAllText(System::Environment::GetFolderPath(System::Environment::SpecialFolder::ApplicationData) +
+					"\\GoogleAuthetificator\\Data.json", JsonConvert::SerializeObject(user));
+
 			tabControl1->SelectedIndex = 0;
 			login = "";
 			password = "";
 			user = nullptr;
+			if (info_auth->Text == "label8")
+				info_auth->Visible = false;
 		} else if (tabControl1->SelectedIndex > 4)
 			tabControl1->SelectedIndex = 3;
 	}
@@ -1802,7 +1813,7 @@ namespace WinApp {
 		configFile->AppSettings->Settings["password"]->Value = password;
 		configFile->AppSettings->Settings["remember"]->Value = remember ? "true" : "false";
 		configFile->Save(ConfigurationSaveMode::Modified); // Сохранение настроек
-		if (!isAuthed)
+		if (!isAuthed && user != nullptr)
 			File::WriteAllText(System::Environment::GetFolderPath(System::Environment::SpecialFolder::ApplicationData) +
 				"\\GoogleAuthetificator\\Data.json", JsonConvert::SerializeObject(user));
 	}
