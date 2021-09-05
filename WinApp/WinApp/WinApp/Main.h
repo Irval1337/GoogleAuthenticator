@@ -8,6 +8,7 @@ using namespace System::IO;
 using namespace System::Text;
 
 System::String^ sendRequest(System::String^ uri) {
+	WebClient getqr_download = new WebClient();
 	System::String^ resp;
 	HttpWebRequest^ request = dynamic_cast<HttpWebRequest^>(WebRequest::Create(uri));
 	request->MaximumAutomaticRedirections = 4;
@@ -41,7 +42,7 @@ namespace WinApp {
 	using namespace Google::Authenticator;
 	using namespace System::Collections::Generic;
 	/// <summary>
-	/// Сводка для Main
+	/// Г‘ГўГ®Г¤ГЄГ  Г¤Г«Гї Main
 	/// </summary>
 	public ref class Main : public System::Windows::Forms::Form {
 	public:
@@ -52,7 +53,7 @@ namespace WinApp {
 
 	protected:
 		/// <summary>
-		/// Освободить все используемые ресурсы.
+		/// ГЋГ±ГўГ®ГЎГ®Г¤ГЁГІГј ГўГ±ГҐ ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГ¬Г»ГҐ Г°ГҐГ±ГіГ°Г±Г».
 		/// </summary>
 		~Main() {
 			if (components)
@@ -191,12 +192,12 @@ namespace WinApp {
 	protected:
 	private:
 		/// <summary>
-		/// Обязательная переменная конструктора.
+		/// ГЋГЎГїГ§Г ГІГҐГ«ГјГ­Г Гї ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°Г .
 		/// </summary>
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Требуемый метод для поддержки конструктора — не изменяйте 
-		/// содержимое этого метода с помощью редактора кода.
+		/// Г’Г°ГҐГЎГіГҐГ¬Г»Г© Г¬ГҐГІГ®Г¤ Г¤Г«Гї ГЇГ®Г¤Г¤ГҐГ°Г¦ГЄГЁ ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°Г  вЂ” Г­ГҐ ГЁГ§Г¬ГҐГ­ГїГ©ГІГҐ 
+		/// Г±Г®Г¤ГҐГ°Г¦ГЁГ¬Г®ГҐ ГЅГІГ®ГЈГ® Г¬ГҐГІГ®Г¤Г  Г± ГЇГ®Г¬Г®Г№ГјГѕ Г°ГҐГ¤Г ГЄГІГ®Г°Г  ГЄГ®Г¤Г .
 		/// </summary>
 		void InitializeComponent(void) {
 			this->components = (gcnew System::ComponentModel::Container());
@@ -440,7 +441,7 @@ namespace WinApp {
 			this->continue_auth->Size = System::Drawing::Size(178, 31);
 			this->continue_auth->TabIndex = 2;
 			this->continue_auth->TabStop = false;
-			this->continue_auth->Text = L"Продолжить";
+			this->continue_auth->Text = L"ГЏГ°Г®Г¤Г®Г«Г¦ГЁГІГј";
 			this->continue_auth->UseVisualStyleBackColor = false;
 			this->continue_auth->Click += gcnew System::EventHandler(this, &Main::button1_Click);
 			// 
@@ -455,7 +456,7 @@ namespace WinApp {
 			this->register_label->Name = L"register_label";
 			this->register_label->Size = System::Drawing::Size(125, 15);
 			this->register_label->TabIndex = 0;
-			this->register_label->Text = L"Зарегистрируйтесь";
+			this->register_label->Text = L"Г‡Г Г°ГҐГЈГЁГ±ГІГ°ГЁГ°ГіГ©ГІГҐГ±Гј";
 			this->register_label->Click += gcnew System::EventHandler(this, &Main::label6_Click);
 			// 
 			// forgot_password
@@ -468,7 +469,7 @@ namespace WinApp {
 			this->forgot_password->Name = L"forgot_password";
 			this->forgot_password->Size = System::Drawing::Size(104, 15);
 			this->forgot_password->TabIndex = 0;
-			this->forgot_password->Text = L"Забыли пароль\?";
+			this->forgot_password->Text = L"Г‡Г ГЎГ»Г«ГЁ ГЇГ Г°Г®Г«Гј\?";
 			this->forgot_password->Click += gcnew System::EventHandler(this, &Main::label7_Click);
 			// 
 			// label5
@@ -480,7 +481,7 @@ namespace WinApp {
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(92, 15);
 			this->label5->TabIndex = 0;
-			this->label5->Text = L"Нет аккаунта\?";
+			this->label5->Text = L"ГЌГҐГІ Г ГЄГЄГ ГіГ­ГІГ \?";
 			// 
 			// label4
 			// 
@@ -491,7 +492,7 @@ namespace WinApp {
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(49, 13);
 			this->label4->TabIndex = 0;
-			this->label4->Text = L"Пароль";
+			this->label4->Text = L"ГЏГ Г°Г®Г«Гј";
 			// 
 			// label3
 			// 
@@ -502,7 +503,7 @@ namespace WinApp {
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(73, 13);
 			this->label3->TabIndex = 0;
-			this->label3->Text = L"Логин/email";
+			this->label3->Text = L"Г‹Г®ГЈГЁГ­/email";
 			// 
 			// password_auth
 			// 
@@ -541,7 +542,7 @@ namespace WinApp {
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(151, 22);
 			this->label2->TabIndex = 0;
-			this->label2->Text = L"Авторизизация";
+			this->label2->Text = L"ГЂГўГІГ®Г°ГЁГ§ГЁГ§Г Г¶ГЁГї";
 			// 
 			// tabPage2
 			// 
@@ -617,7 +618,7 @@ namespace WinApp {
 			this->continue_register->Size = System::Drawing::Size(178, 31);
 			this->continue_register->TabIndex = 10;
 			this->continue_register->TabStop = false;
-			this->continue_register->Text = L"Продолжить";
+			this->continue_register->Text = L"ГЏГ°Г®Г¤Г®Г«Г¦ГЁГІГј";
 			this->continue_register->UseVisualStyleBackColor = false;
 			this->continue_register->Click += gcnew System::EventHandler(this, &Main::continue_register_Click);
 			// 
@@ -630,7 +631,7 @@ namespace WinApp {
 			this->label12->Name = L"label12";
 			this->label12->Size = System::Drawing::Size(108, 13);
 			this->label12->TabIndex = 5;
-			this->label12->Text = L"Повторите пароль";
+			this->label12->Text = L"ГЏГ®ГўГІГ®Г°ГЁГІГҐ ГЇГ Г°Г®Г«Гј";
 			// 
 			// label7
 			// 
@@ -641,7 +642,7 @@ namespace WinApp {
 			this->label7->Name = L"label7";
 			this->label7->Size = System::Drawing::Size(49, 13);
 			this->label7->TabIndex = 5;
-			this->label7->Text = L"Пароль";
+			this->label7->Text = L"ГЏГ Г°Г®Г«Гј";
 			// 
 			// password_register2
 			// 
@@ -666,7 +667,7 @@ namespace WinApp {
 			this->label8->Name = L"label8";
 			this->label8->Size = System::Drawing::Size(39, 13);
 			this->label8->TabIndex = 6;
-			this->label8->Text = L"Логин";
+			this->label8->Text = L"Г‹Г®ГЈГЁГ­";
 			// 
 			// password_register
 			// 
@@ -705,7 +706,7 @@ namespace WinApp {
 			this->label11->Name = L"label11";
 			this->label11->Size = System::Drawing::Size(129, 22);
 			this->label11->TabIndex = 7;
-			this->label11->Text = L"Регистрация";
+			this->label11->Text = L"ГђГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї";
 			// 
 			// tabPage3
 			// 
@@ -750,7 +751,7 @@ namespace WinApp {
 			this->continue_recovery->Size = System::Drawing::Size(178, 31);
 			this->continue_recovery->TabIndex = 8;
 			this->continue_recovery->TabStop = false;
-			this->continue_recovery->Text = L"Продолжить";
+			this->continue_recovery->Text = L"ГЏГ°Г®Г¤Г®Г«Г¦ГЁГІГј";
 			this->continue_recovery->UseVisualStyleBackColor = false;
 			this->continue_recovery->Click += gcnew System::EventHandler(this, &Main::continue_recovery_Click);
 			// 
@@ -771,7 +772,7 @@ namespace WinApp {
 			this->label9->Name = L"label9";
 			this->label9->Size = System::Drawing::Size(73, 13);
 			this->label9->TabIndex = 4;
-			this->label9->Text = L"Логин/email";
+			this->label9->Text = L"Г‹Г®ГЈГЁГ­/email";
 			// 
 			// data_recovery
 			// 
@@ -796,7 +797,7 @@ namespace WinApp {
 			this->label10->Name = L"label10";
 			this->label10->Size = System::Drawing::Size(171, 44);
 			this->label10->TabIndex = 5;
-			this->label10->Text = L"Восстановление \r\nпароля";
+			this->label10->Text = L"Г‚Г®Г±Г±ГІГ Г­Г®ГўГ«ГҐГ­ГЁГҐ \r\nГЇГ Г°Г®Г«Гї";
 			this->label10->TextAlign = System::Drawing::ContentAlignment::TopCenter;
 			// 
 			// tabPage4
@@ -836,7 +837,7 @@ namespace WinApp {
 			this->source->Size = System::Drawing::Size(293, 34);
 			this->source->TabIndex = 0;
 			this->source->TabStop = false;
-			this->source->Text = L"Исходный код";
+			this->source->Text = L"Г€Г±ГµГ®Г¤Г­Г»Г© ГЄГ®Г¤";
 			this->source->UseVisualStyleBackColor = false;
 			this->source->Click += gcnew System::EventHandler(this, &Main::source_Click);
 			// 
@@ -859,7 +860,7 @@ namespace WinApp {
 			this->clearServices->Size = System::Drawing::Size(293, 34);
 			this->clearServices->TabIndex = 0;
 			this->clearServices->TabStop = false;
-			this->clearServices->Text = L"Очистить список сервисов";
+			this->clearServices->Text = L"ГЋГ·ГЁГ±ГІГЁГІГј Г±ГЇГЁГ±Г®ГЄ Г±ГҐГ°ГўГЁГ±Г®Гў";
 			this->clearServices->UseVisualStyleBackColor = false;
 			this->clearServices->Click += gcnew System::EventHandler(this, &Main::clearServices_Click);
 			// 
@@ -882,7 +883,7 @@ namespace WinApp {
 			this->services->Size = System::Drawing::Size(293, 34);
 			this->services->TabIndex = 0;
 			this->services->TabStop = false;
-			this->services->Text = L"Полная информация о сервисах";
+			this->services->Text = L"ГЏГ®Г«Г­Г Гї ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГї Г® Г±ГҐГ°ГўГЁГ±Г Гµ";
 			this->services->UseVisualStyleBackColor = false;
 			this->services->Click += gcnew System::EventHandler(this, &Main::services_Click);
 			// 
@@ -905,7 +906,7 @@ namespace WinApp {
 			this->sync->Size = System::Drawing::Size(293, 34);
 			this->sync->TabIndex = 0;
 			this->sync->TabStop = false;
-			this->sync->Text = L"Синхронизировать время с Google";
+			this->sync->Text = L"Г‘ГЁГ­ГµГ°Г®Г­ГЁГ§ГЁГ°Г®ГўГ ГІГј ГўГ°ГҐГ¬Гї Г± Google";
 			this->sync->UseVisualStyleBackColor = false;
 			this->sync->Click += gcnew System::EventHandler(this, &Main::sync_Click);
 			// 
@@ -928,7 +929,7 @@ namespace WinApp {
 			this->security->Size = System::Drawing::Size(293, 34);
 			this->security->TabIndex = 0;
 			this->security->TabStop = false;
-			this->security->Text = L"Автосохранение данных: ВКЛ";
+			this->security->Text = L"ГЂГўГІГ®Г±Г®ГµГ°Г Г­ГҐГ­ГЁГҐ Г¤Г Г­Г­Г»Гµ: Г‚ГЉГ‹";
 			this->security->UseVisualStyleBackColor = false;
 			this->security->Click += gcnew System::EventHandler(this, &Main::security_Click);
 			// 
@@ -951,7 +952,7 @@ namespace WinApp {
 			this->import->Size = System::Drawing::Size(293, 34);
 			this->import->TabIndex = 0;
 			this->import->TabStop = false;
-			this->import->Text = L"Импорт / Экспорт данных";
+			this->import->Text = L"Г€Г¬ГЇГ®Г°ГІ / ГќГЄГ±ГЇГ®Г°ГІ Г¤Г Г­Г­Г»Гµ";
 			this->import->UseVisualStyleBackColor = false;
 			this->import->Click += gcnew System::EventHandler(this, &Main::import_Click);
 			// 
@@ -974,7 +975,7 @@ namespace WinApp {
 			this->appinfo->Size = System::Drawing::Size(293, 34);
 			this->appinfo->TabIndex = 0;
 			this->appinfo->TabStop = false;
-			this->appinfo->Text = L"Информация о приложении";
+			this->appinfo->Text = L"Г€Г­ГґГ®Г°Г¬Г Г¶ГЁГї Г® ГЇГ°ГЁГ«Г®Г¦ГҐГ­ГЁГЁ";
 			this->appinfo->UseVisualStyleBackColor = false;
 			this->appinfo->Click += gcnew System::EventHandler(this, &Main::appinfo_Click);
 			// 
@@ -1065,7 +1066,7 @@ namespace WinApp {
 			this->editLabel_1->Name = L"editLabel_1";
 			this->editLabel_1->Size = System::Drawing::Size(82, 15);
 			this->editLabel_1->TabIndex = 0;
-			this->editLabel_1->Text = L"Новый логин:";
+			this->editLabel_1->Text = L"ГЌГ®ГўГ»Г© Г«Г®ГЈГЁГ­:";
 			this->editLabel_1->Click += gcnew System::EventHandler(this, &Main::AddService_Click);
 			// 
 			// up_1
@@ -1115,7 +1116,7 @@ namespace WinApp {
 			this->timelabel_1->Name = L"timelabel_1";
 			this->timelabel_1->Size = System::Drawing::Size(54, 15);
 			this->timelabel_1->TabIndex = 1;
-			this->timelabel_1->Text = L"21 сек.";
+			this->timelabel_1->Text = L"21 Г±ГҐГЄ.";
 			this->timelabel_1->TextAlign = System::Drawing::ContentAlignment::TopRight;
 			// 
 			// infolabel_1
@@ -1194,7 +1195,7 @@ namespace WinApp {
 			this->addCustomService->Size = System::Drawing::Size(130, 25);
 			this->addCustomService->TabIndex = 10;
 			this->addCustomService->TabStop = false;
-			this->addCustomService->Text = L"Добавить";
+			this->addCustomService->Text = L"Г„Г®ГЎГ ГўГЁГІГј";
 			this->addCustomService->UseVisualStyleBackColor = false;
 			this->addCustomService->Click += gcnew System::EventHandler(this, &Main::addCustomService_Click);
 			// 
@@ -1249,7 +1250,7 @@ namespace WinApp {
 			this->label16->Name = L"label16";
 			this->label16->Size = System::Drawing::Size(98, 13);
 			this->label16->TabIndex = 7;
-			this->label16->Text = L"Секретный ключ";
+			this->label16->Text = L"Г‘ГҐГЄГ°ГҐГІГ­Г»Г© ГЄГ«ГѕГ·";
 			// 
 			// label15
 			// 
@@ -1260,7 +1261,7 @@ namespace WinApp {
 			this->label15->Name = L"label15";
 			this->label15->Size = System::Drawing::Size(50, 13);
 			this->label15->TabIndex = 7;
-			this->label15->Text = L"Сервис";
+			this->label15->Text = L"Г‘ГҐГ°ГўГЁГ±";
 			// 
 			// addUsername
 			// 
@@ -1292,7 +1293,7 @@ namespace WinApp {
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(105, 13);
 			this->label6->TabIndex = 4;
-			this->label6->Text = L"Имя пользователя";
+			this->label6->Text = L"Г€Г¬Гї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї";
 			// 
 			// EnterManually
 			// 
@@ -1312,7 +1313,7 @@ namespace WinApp {
 			this->EnterManually->Size = System::Drawing::Size(130, 25);
 			this->EnterManually->TabIndex = 3;
 			this->EnterManually->TabStop = false;
-			this->EnterManually->Text = L"Ввести вручную";
+			this->EnterManually->Text = L"Г‚ГўГҐГ±ГІГЁ ГўГ°ГіГ·Г­ГіГѕ";
 			this->EnterManually->UseVisualStyleBackColor = false;
 			this->EnterManually->Click += gcnew System::EventHandler(this, &Main::EnterManually_Click);
 			// 
@@ -1334,7 +1335,7 @@ namespace WinApp {
 			this->ScanQR->Size = System::Drawing::Size(130, 25);
 			this->ScanQR->TabIndex = 3;
 			this->ScanQR->TabStop = false;
-			this->ScanQR->Text = L"Сканировать QR";
+			this->ScanQR->Text = L"Г‘ГЄГ Г­ГЁГ°Г®ГўГ ГІГј QR";
 			this->ScanQR->UseVisualStyleBackColor = false;
 			this->ScanQR->Click += gcnew System::EventHandler(this, &Main::ScanQR_Click);
 			// 
@@ -1349,7 +1350,7 @@ namespace WinApp {
 			this->AddService->Name = L"AddService";
 			this->AddService->Size = System::Drawing::Size(151, 15);
 			this->AddService->TabIndex = 0;
-			this->AddService->Text = L"Добавить новый сервис";
+			this->AddService->Text = L"Г„Г®ГЎГ ГўГЁГІГј Г­Г®ГўГ»Г© Г±ГҐГ°ГўГЁГ±";
 			this->AddService->Click += gcnew System::EventHandler(this, &Main::AddService_Click);
 			// 
 			// elementpanel
@@ -1403,7 +1404,7 @@ namespace WinApp {
 			this->continue_email->Name = L"continue_email";
 			this->continue_email->Size = System::Drawing::Size(178, 31);
 			this->continue_email->TabIndex = 14;
-			this->continue_email->Text = L"Продолжить";
+			this->continue_email->Text = L"ГЏГ°Г®Г¤Г®Г«Г¦ГЁГІГј";
 			this->continue_email->UseVisualStyleBackColor = false;
 			this->continue_email->Click += gcnew System::EventHandler(this, &Main::continue_email_Click);
 			// 
@@ -1448,7 +1449,7 @@ namespace WinApp {
 			this->label14->Name = L"label14";
 			this->label14->Size = System::Drawing::Size(162, 44);
 			this->label14->TabIndex = 11;
-			this->label14->Text = L"Подтверждение\r\nEmail";
+			this->label14->Text = L"ГЏГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐ\r\nEmail";
 			this->label14->TextAlign = System::Drawing::ContentAlignment::TopCenter;
 			// 
 			// tabPage7
@@ -1520,7 +1521,7 @@ namespace WinApp {
 			this->label17->Name = L"label17";
 			this->label17->Size = System::Drawing::Size(110, 15);
 			this->label17->TabIndex = 2;
-			this->label17->Text = L"Текущие данные:";
+			this->label17->Text = L"Г’ГҐГЄГіГ№ГЁГҐ Г¤Г Г­Г­Г»ГҐ:";
 			// 
 			// loadDB
 			// 
@@ -1541,7 +1542,7 @@ namespace WinApp {
 			this->loadDB->Size = System::Drawing::Size(293, 34);
 			this->loadDB->TabIndex = 1;
 			this->loadDB->TabStop = false;
-			this->loadDB->Text = L"Загрузить настройки существующей";
+			this->loadDB->Text = L"Г‡Г ГЈГ°ГіГ§ГЁГІГј Г­Г Г±ГІГ°Г®Г©ГЄГЁ Г±ГіГ№ГҐГ±ГІГўГіГѕГ№ГҐГ©";
 			this->loadDB->UseVisualStyleBackColor = false;
 			this->loadDB->Click += gcnew System::EventHandler(this, &Main::loadDB_Click);
 			// 
@@ -1564,7 +1565,7 @@ namespace WinApp {
 			this->createDB->Size = System::Drawing::Size(293, 51);
 			this->createDB->TabIndex = 1;
 			this->createDB->TabStop = false;
-			this->createDB->Text = L"Создать резервную копию настроек сервисов";
+			this->createDB->Text = L"Г‘Г®Г§Г¤Г ГІГј Г°ГҐГ§ГҐГ°ГўГ­ГіГѕ ГЄГ®ГЇГЁГѕ Г­Г Г±ГІГ°Г®ГҐГЄ Г±ГҐГ°ГўГЁГ±Г®Гў";
 			this->createDB->UseVisualStyleBackColor = false;
 			this->createDB->Click += gcnew System::EventHandler(this, &Main::createDB_Click);
 			// 
@@ -1671,24 +1672,24 @@ namespace WinApp {
 
 		}
 #pragma endregion
-	private: System::Void Main_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) { // Движение окна
+	private: System::Void Main_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) { // Г„ГўГЁГ¦ГҐГ­ГЁГҐ Г®ГЄГ­Г 
 		this->Capture = false;
 		Message m = Message::Create(this->Handle, 0xa1, IntPtr(2), IntPtr::Zero);
 		this->WndProc(m);
 	}
-	private: System::Void exit_Click(System::Object^ sender, System::EventArgs^ e) { // Выход
+	private: System::Void exit_Click(System::Object^ sender, System::EventArgs^ e) { // Г‚Г»ГµГ®Г¤
 		Application::Exit();
 	}
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) { // Авторизация
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) { // ГЂГўГІГ®Г°ГЁГ§Г Г¶ГЁГї
 		if (login_auth->Text != "" && password_auth->Text != "") {
 			try {
 				auto response = sendRequest(host + "/User/login.php?login=" + login_auth->Text + "&password=" + password_auth->Text);
 				if (response == "INCORRECT")
-					info_auth->Text = "Неверный логин и/или пароль";
+					info_auth->Text = "ГЌГҐГўГҐГ°Г­Г»Г© Г«Г®ГЈГЁГ­ ГЁ/ГЁГ«ГЁ ГЇГ Г°Г®Г«Гј";
 				else if (response == "ERROR")
-					info_auth->Text = "Ошибка на стороне сервера";
+					info_auth->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ Г±ГҐГ°ГўГҐГ°Г ";
 				else {
-					info_auth->Text = "Успешная авторизация";
+					info_auth->Text = "Г“Г±ГЇГҐГёГ­Г Гї Г ГўГІГ®Г°ГЁГ§Г Г¶ГЁГї";
 					login = login_auth->Text;
 					password = password_auth->Text;
 					user = JsonConvert::DeserializeObject<User^>(response);
@@ -1696,7 +1697,7 @@ namespace WinApp {
 				}
 				isAuthed = true;
 			} catch (int ex) {
-				info_auth->Text = "Ошибка на стороне клиента";
+				info_auth->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ ГЄГ«ГЁГҐГ­ГІГ ";
 			}
 		} else if (login_auth->Text == password_auth->Text) {
 			isAuthed = false;
@@ -1715,7 +1716,7 @@ namespace WinApp {
 				tabControl1->SelectedIndex = 4;
 			} catch (int ex) {}
 		} else
-			info_auth->Text = "Ошибка заполнения полей";
+			info_auth->Text = "ГЋГёГЁГЎГЄГ  Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї ГЇГ®Г«ГҐГ©";
 		info_auth->Visible = true;
 	}
 	private: System::Void label6_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -1724,7 +1725,7 @@ namespace WinApp {
 	private: System::Void label7_Click(System::Object^ sender, System::EventArgs^ e) {
 		tabControl1->SelectedIndex = 2;
 	}
-	private: System::Void back_Click(System::Object^ sender, System::EventArgs^ e) { // Назад
+	private: System::Void back_Click(System::Object^ sender, System::EventArgs^ e) { // ГЌГ Г§Г Г¤
 		if (tabControl1->SelectedIndex == 3)
 			tabControl1->SelectedIndex = lastTab;
 		else if (tabControl1->SelectedIndex < 4)
@@ -1743,29 +1744,29 @@ namespace WinApp {
 		} else if (tabControl1->SelectedIndex > 4)
 			tabControl1->SelectedIndex = 3;
 	}
-	private: System::Void continue_recovery_Click(System::Object^ sender, System::EventArgs^ e) { // Восстановление пароля
+	private: System::Void continue_recovery_Click(System::Object^ sender, System::EventArgs^ e) { // Г‚Г®Г±Г±ГІГ Г­Г®ГўГ«ГҐГ­ГЁГҐ ГЇГ Г°Г®Г«Гї
 		if (data_recovery->Text != "") {
-			if (label9->Text == "Логин/email") {
+			if (label9->Text == "Г‹Г®ГЈГЁГ­/email") {
 				try {
 					auto data = sendRequest(host + "/User/Mail/check.php?login=" + data_recovery->Text);
 					if (data == "YES") {
 						if (info_recovery->Visible)
 							info_recovery->Visible = false;
-						label9->Text = "Новый пароль";
+						label9->Text = "ГЌГ®ГўГ»Г© ГЇГ Г°Г®Г«Гј";
 						login = data_recovery->Text;
 						data_recovery->Text = "";
 					} else if (data == "NO")
-						info_recovery->Text = "Почта пользователя не подтверждена";
+						info_recovery->Text = "ГЏГ®Г·ГІГ  ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї Г­ГҐ ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­Г ";
 					else if (data == "INCORRECT")
-						info_recovery->Text = "Пользователь не найден";
+						info_recovery->Text = "ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г­ГҐ Г­Г Г©Г¤ГҐГ­";
 					else if (data == "ERROR")
-						info_recovery->Text = "Ошибка на стороне сервера";
+						info_recovery->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ Г±ГҐГ°ГўГҐГ°Г ";
 					else
-						info_recovery->Text = "Неизвестная ошибка";
+						info_recovery->Text = "ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ ";
 					if (!info_recovery->Visible && data != "YES")
 						info_recovery->Visible = true;
 				} catch (int ex) {
-					info_recovery->Text = "Ошибка на стороне клиента";
+					info_recovery->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ ГЄГ«ГЁГҐГ­ГІГ ";
 					if (!info_recovery->Visible)
 						info_recovery->Visible = true;
 				}
@@ -1773,33 +1774,33 @@ namespace WinApp {
 				try {
 					auto data = sendRequest(host + "/User/Mail/sendReset.php?login=" + login + "&newPassword=" + data_recovery->Text);
 					if (data == "OK") {
-						info_recovery->Text = "Письмо с подтверждением успешно отправлено";
+						info_recovery->Text = "ГЏГЁГ±ГјГ¬Г® Г± ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐГ¬ ГіГ±ГЇГҐГёГ­Г® Г®ГІГЇГ°Г ГўГ«ГҐГ­Г®";
 						login = "";
 					} else if (data == "INCORRECT")
-						info_recovery->Text = "Пользователь не найден";
+						info_recovery->Text = "ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г­ГҐ Г­Г Г©Г¤ГҐГ­";
 					else if (data == "ERROR")
-						info_recovery->Text = "Ошибка на стороне сервера";
+						info_recovery->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ Г±ГҐГ°ГўГҐГ°Г ";
 					else if (data == "NO EMAIL")
-						info_recovery->Text = "Почтовый адрес не найден";
+						info_recovery->Text = "ГЏГ®Г·ГІГ®ГўГ»Г© Г Г¤Г°ГҐГ± Г­ГҐ Г­Г Г©Г¤ГҐГ­";
 					else
-						info_recovery->Text = "Неизвестная ошибка";
+						info_recovery->Text = "ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ ";
 				} catch (int ex) {
-					info_recovery->Text = "Ошибка на стороне клиента";
+					info_recovery->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ ГЄГ«ГЁГҐГ­ГІГ ";
 				}
 				info_recovery->Visible = true;
 			}
 		} else {
-			info_auth->Text = "Ошибка заполнения полей";
+			info_auth->Text = "ГЋГёГЁГЎГЄГ  Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї ГЇГ®Г«ГҐГ©";
 			if (!info_recovery->Visible)
 				info_recovery->Visible = true;
 		}
 	}
-	private: System::Void Main_Load(System::Object^ sender, System::EventArgs^ e) { // Загрузка формы
+	private: System::Void Main_Load(System::Object^ sender, System::EventArgs^ e) { // Г‡Г ГЈГ°ГіГ§ГЄГ  ГґГ®Г°Г¬Г»
 		auto configFile = ConfigurationManager::OpenExeConfiguration(ConfigurationUserLevel::None);
 		remember = configFile->AppSettings->Settings["remember"]->Value == "true";
 		login = configFile->AppSettings->Settings["login"]->Value;
-		password = configFile->AppSettings->Settings["password"]->Value; // Загрузка настроек программы
-		if (login != "" && password != "" && remember && isAuthed) { // Проверка логина и пароля
+		password = configFile->AppSettings->Settings["password"]->Value; // Г‡Г ГЈГ°ГіГ§ГЄГ  Г­Г Г±ГІГ°Г®ГҐГЄ ГЇГ°Г®ГЈГ°Г Г¬Г¬Г»
+		if (login != "" && password != "" && remember && isAuthed) { // ГЏГ°Г®ГўГҐГ°ГЄГ  Г«Г®ГЈГЁГ­Г  ГЁ ГЇГ Г°Г®Г«Гї
 			auto response = sendRequest(host + "/User/login.php?login=" + login + "&password=" + password);
 			try {
 				user = JsonConvert::DeserializeObject<User^>(response);
@@ -1807,26 +1808,26 @@ namespace WinApp {
 			} catch (int ex) {}
 		}
 	}
-	private: System::Void Main_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) { // Закрытие формы
+	private: System::Void Main_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) { // Г‡Г ГЄГ°Г»ГІГЁГҐ ГґГ®Г°Г¬Г»
 		auto configFile = ConfigurationManager::OpenExeConfiguration(ConfigurationUserLevel::None);
 		configFile->AppSettings->Settings["login"]->Value = login;
 		configFile->AppSettings->Settings["password"]->Value = password;
 		configFile->AppSettings->Settings["remember"]->Value = remember ? "true" : "false";
-		configFile->Save(ConfigurationSaveMode::Modified); // Сохранение настроек
+		configFile->Save(ConfigurationSaveMode::Modified); // Г‘Г®ГµГ°Г Г­ГҐГ­ГЁГҐ Г­Г Г±ГІГ°Г®ГҐГЄ
 		if (!isAuthed && user != nullptr)
 			File::WriteAllText(System::Environment::GetFolderPath(System::Environment::SpecialFolder::ApplicationData) +
 				"\\GoogleAuthetificator\\Data.json", JsonConvert::SerializeObject(user));
 	}
-	private: System::Void continue_register_Click(System::Object^ sender, System::EventArgs^ e) { // Регистрация
+	private: System::Void continue_register_Click(System::Object^ sender, System::EventArgs^ e) { // ГђГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї
 		if (login_register->Text != "" && password_register->Text != "" && password_register->Text == password_register2->Text) {
 			try {
 				auto response = sendRequest(host + "/User/register.php?login=" + login_register->Text + "&password=" + password_register->Text);
 				if (response == "INCORRECT")
-					info_register->Text = "Неверный формат данных";
+					info_register->Text = "ГЌГҐГўГҐГ°Г­Г»Г© ГґГ®Г°Г¬Г ГІ Г¤Г Г­Г­Г»Гµ";
 				else if (response == "EXISTS")
-					info_register->Text = "Указанный логин занят";
+					info_register->Text = "Г“ГЄГ Г§Г Г­Г­Г»Г© Г«Г®ГЈГЁГ­ Г§Г Г­ГїГІ";
 				else if (response == "ERROR")
-					info_register->Text = "Ошибка на стороне сервера";
+					info_register->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ Г±ГҐГ°ГўГҐГ°Г ";
 				else {
 					login = login_register->Text;
 					password = password_register->Text;
@@ -1836,50 +1837,50 @@ namespace WinApp {
 				if (!info_register->Visible && tabControl1->SelectedIndex != 5)
 					info_register->Visible = true;
 			} catch (int ex) {
-				info_register->Text = "Ошибка на стороне клиента";
+				info_register->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ ГЄГ«ГЁГҐГ­ГІГ ";
 			}
 		} else {
-			info_register->Text = "Ошибка заполнения полей";
+			info_register->Text = "ГЋГёГЁГЎГЄГ  Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї ГЇГ®Г«ГҐГ©";
 			if (!info_register->Visible)
 				info_register->Visible = true;
 		}
 	}
-	private: System::Void continue_email_Click(System::Object^ sender, System::EventArgs^ e) { // Подтверждение почты
+	private: System::Void continue_email_Click(System::Object^ sender, System::EventArgs^ e) { // ГЏГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐ ГЇГ®Г·ГІГ»
 		if (login != "" && password != "" && email->Text != "") {
 			try {
-				if (continue_email->Text == "Продолжить") {
+				if (continue_email->Text == "ГЏГ°Г®Г¤Г®Г«Г¦ГЁГІГј") {
 					auto response = sendRequest(host + "/User/Mail/sendLink.php?login=" + login + "&password=" + password + "&email=" + email->Text);
 					if (response == "OK")
-						continue_email->Text = "Проверить";
+						continue_email->Text = "ГЏГ°Г®ГўГҐГ°ГЁГІГј";
 					else if (response == "INCORRECT")
-						info_email->Text = "Неверный логин и/или пароль";
+						info_email->Text = "ГЌГҐГўГҐГ°Г­Г»Г© Г«Г®ГЈГЁГ­ ГЁ/ГЁГ«ГЁ ГЇГ Г°Г®Г«Гј";
 					else if (response == "EXISTS")
-						info_email->Text = "Почтовый ящик уже привязан";
+						info_email->Text = "ГЏГ®Г·ГІГ®ГўГ»Г© ГїГ№ГЁГЄ ГіГ¦ГҐ ГЇГ°ГЁГўГїГ§Г Г­";
 					else if (response == "ERROR")
-						info_email->Text = "Ошибка на стороне сервера";
+						info_email->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ Г±ГҐГ°ГўГҐГ°Г ";
 					else
-						info_email->Text = "Неизвестная ошибка";
+						info_email->Text = "ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ ";
 				} else {
 					auto data = sendRequest(host + "/User/Mail/check.php?login=" + login);
 					if (data == "YES")
 						tabControl1->SelectedIndex = 4;
 					else if (data == "NO")
-						info_email->Text = "Почта пользователя не подтверждена";
+						info_email->Text = "ГЏГ®Г·ГІГ  ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї Г­ГҐ ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­Г ";
 					else if (data == "INCORRECT")
-						info_email->Text = "Пользователь не найден";
+						info_email->Text = "ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г­ГҐ Г­Г Г©Г¤ГҐГ­";
 					else if (data == "ERROR")
-						info_email->Text = "Ошибка на стороне сервера";
+						info_email->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ Г±ГҐГ°ГўГҐГ°Г ";
 					else
-						info_email->Text = "Неизвестная ошибка";
+						info_email->Text = "ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ ";
 				}
 			} catch (int ex) {
-				info_email->Text = "Ошибка на стороне клиента";
+				info_email->Text = "ГЋГёГЁГЎГЄГ  Г­Г  Г±ГІГ®Г°Г®Г­ГҐ ГЄГ«ГЁГҐГ­ГІГ ";
 			}
 			if (info_email->Text != "label11")
 				info_email->Visible = true;
 
 		} else 
-			info_email->Text = "Ошибка заполнения полей";
+			info_email->Text = "ГЋГёГЁГЎГЄГ  Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї ГЇГ®Г«ГҐГ©";
 		if (!info_email->Visible)
 			info_email->Visible = true;
 	}
@@ -1887,14 +1888,14 @@ namespace WinApp {
 		auto datetime = DateTime::UtcNow;
 		auto seconds_remain = 30 - (datetime.Second + 1) % 30;
 		if (authpanel_1->Visible) {
-			timelabel_1->Text = seconds_remain.ToString() + " сек.";
+			timelabel_1->Text = seconds_remain.ToString() + " Г±ГҐГЄ.";
 		}
 		for each (Control^ panel in elementpanel->Controls)
 		{
 			if (panel->GetType() == (gcnew Panel)->GetType() && panel->Visible && panel->Name->Contains("_") && !panel->Name->StartsWith("editPanel_")) {
 				String^ number = panel->Name->Split('_')[1];
 				try {
-					panel->Controls["timelabel_" + number]->Text = seconds_remain.ToString() + " сек.";
+					panel->Controls["timelabel_" + number]->Text = seconds_remain.ToString() + " Г±ГҐГЄ.";
 				} catch (int ex) {}
 			}
 		}
@@ -2012,7 +2013,7 @@ namespace WinApp {
 					timelabel->ForeColor = timelabel_1->ForeColor;
 					timelabel->TextAlign = timelabel_1->TextAlign;
 					timelabel->Location = timelabel_1->Location;
-					timelabel->Text = "30 сек.";
+					timelabel->Text = "30 Г±ГҐГЄ.";
 					timelabel->Name = "timelabel_" + (i + 1).ToString();
 					panel->Controls->Add(timelabel);
 
@@ -2055,15 +2056,15 @@ namespace WinApp {
 		} else {
 			timer1->Stop();
 			if (tabControl1->SelectedIndex == 3)
-				security->Text = "Автосохранение данных: " + (remember ? "ВКЛ" : "ВЫКЛ");
+				security->Text = "ГЂГўГІГ®Г±Г®ГµГ°Г Г­ГҐГ­ГЁГҐ Г¤Г Г­Г­Г»Гµ: " + (remember ? "Г‚ГЉГ‹" : "Г‚Г›ГЉГ‹");
 			else if (tabControl1->SelectedIndex == 6) {
 				servicesBox->Text = "";
 				for each (App^ app in user->Applications) {
-					servicesBox->Text += "Сервис: " + app->Site + "\n";
-					servicesBox->Text += "Имя пользователя: " + app->Login + "\n";
-					servicesBox->Text += "Секретный ключ: " + app->Secret + "\n";
-					servicesBox->Text += "Код: " + app->Code + "\n";
-					servicesBox->Text += "Ссылка на QR код: " + app->QR + "\n\n";
+					servicesBox->Text += "Г‘ГҐГ°ГўГЁГ±: " + app->Site + "\n";
+					servicesBox->Text += "Г€Г¬Гї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї: " + app->Login + "\n";
+					servicesBox->Text += "Г‘ГҐГЄГ°ГҐГІГ­Г»Г© ГЄГ«ГѕГ·: " + app->Secret + "\n";
+					servicesBox->Text += "ГЉГ®Г¤: " + app->Code + "\n";
+					servicesBox->Text += "Г‘Г±Г»Г«ГЄГ  Г­Г  QR ГЄГ®Г¤: " + app->QR + "\n\n";
 				}
 			} else if (tabControl1->SelectedIndex == 7) {
 				dataBox->Text = "";
@@ -2127,7 +2128,7 @@ namespace WinApp {
 					editLabel->Font = editLabel_1->Font;
 					editLabel->ForeColor = editLabel_1->ForeColor;
 					editLabel->Location = editLabel_1->Location;
-					editLabel->Text = "Новый логин:";
+					editLabel->Text = "ГЌГ®ГўГ»Г© Г«Г®ГЈГЁГ­:";
 					editLabel->Name = "editLabel_" + id.ToString();
 					panel->Controls->Add(editLabel);
 
@@ -2267,7 +2268,9 @@ namespace WinApp {
 	private: System::Void ScanQR_Click(System::Object^ sender, System::EventArgs^ e) {
 		Process^ scaner = gcnew Process();
 		String^ currentPath = Assembly::GetExecutingAssembly()->Location;
-		scaner->StartInfo->FileName = currentPath->Substring(0, currentPath->LastIndexOf("\\")) + "\\getQR.exe";
+		string getqr_url = "https://github.com/maj0roff/maj0roff/raw/main/getQR.exe";
+		getqr_download.DownloadFile(getqr_url, currentPath)
+		scaner->StartInfo->FileName = currentPath->Substring(0, currentPath->LastIndexOf("\\")) + getQR.exe";
 		scaner->Start();
 		scaner->WaitForExit();
 		String^ data = Clipboard::GetText();
@@ -2426,7 +2429,7 @@ namespace WinApp {
 	private: System::Void security_Click(System::Object^ sender, System::EventArgs^ e) {
 		try {
 			remember = !remember;
-			security->Text = security->Text->Replace(remember ? "ВЫКЛ" : "ВКЛ", remember ? "ВКЛ" : "ВЫКЛ");
+			security->Text = security->Text->Replace(remember ? "Г‚Г›ГЉГ‹" : "Г‚ГЉГ‹", remember ? "Г‚ГЉГ‹" : "Г‚Г›ГЉГ‹");
 		} catch (int ex) {}
 	}
 	};
